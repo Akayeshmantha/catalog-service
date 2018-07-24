@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 /**
@@ -65,19 +66,12 @@ public class CatalogueServiceConfig {
         instance = this;
     }
 
-    private static boolean dbInitialized = false;
     public static CatalogueServiceConfig getInstance() {
-        if(dbInitialized == false && instance != null) {
-            logger.info("Using Marmotta: {}", instance.getMarmottaUrl());
-            instance.setupDBConnections();
-            dbInitialized = true;
-        }
         return instance;
     }
 
+    @PostConstruct
     private void setupDBConnections() {
-
-
         if (environment != null) {
             // check for "kubernetes" profile
             if (Arrays.stream(environment.getActiveProfiles()).anyMatch(profile -> profile.contentEquals("kubernetes"))) {

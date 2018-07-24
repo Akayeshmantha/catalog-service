@@ -1,6 +1,7 @@
 package eu.nimble.service.catalogue.category.taxonomy.eclass.database;
 
 import eu.nimble.service.catalogue.model.category.*;
+import eu.nimble.service.catalogue.util.SpringBridge;
 import eu.nimble.utility.config.CatalogueServiceConfig;
 import eu.nimble.service.catalogue.exception.CategoryDatabaseException;
 import eu.nimble.service.catalogue.template.TemplateConfig;
@@ -35,7 +36,7 @@ public class EClassCategoryDatabaseAdapter {
 
     private Connection getConnection() throws CategoryDatabaseException {
         try {
-            CatalogueServiceConfig config = CatalogueServiceConfig.getInstance();
+            CatalogueServiceConfig config = SpringBridge.getInstance().getCatalogueServiceConfig();
 
             Class.forName(config.getCategoryDbDriver());
             Connection connection = DriverManager
@@ -205,30 +206,6 @@ public class EClassCategoryDatabaseAdapter {
 
             PreparedStatement preparedStatement = connection.prepareStatement(eClassQueryGetClassificationClassByLevel());
             preparedStatement.setString(1, Integer.toString(level));
-            ResultSet rs = preparedStatement.executeQuery();
-            results = extractClassificationClassesFromResultSet(rs);
-            rs.close();
-            preparedStatement.close();
-
-            return results;
-        } catch (SQLException e) {
-            throw new CategoryDatabaseException("Failed to retrieve classification by level", e);
-        } finally {
-            closeConnection(connection);
-        }
-    }
-
-    public List<Category> getSubCategories(String parentId) throws CategoryDatabaseException {
-        Connection connection = null;
-        List<Category> results = new ArrayList<>();
-
-        try {
-            connection = getConnection();
-            Category cc = getCategoryById(parentId);
-
-            PreparedStatement preparedStatement = connection.prepareStatement(eClassQueryGetSubCategoryIds());
-            preparedStatement.setString(1, Integer.toString(cc.getLevel() + 1));
-            preparedStatement.setString(2, cc.getCode().substring(0, 2) + "%");
             ResultSet rs = preparedStatement.executeQuery();
             results = extractClassificationClassesFromResultSet(rs);
             rs.close();
