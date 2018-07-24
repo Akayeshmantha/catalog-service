@@ -81,7 +81,7 @@ public class CatalogueController {
     @RequestMapping(value = "/catalogue/{partyId}/default",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getDefaultCatalogue(@PathVariable String partyId) {
+    public ResponseEntity getDefaultCatalogue(@PathVariable String partyId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to get default catalogue for party: {}", partyId);
         // TODO : Check whether the given party id is valid or not.
         CatalogueType catalogue;
@@ -121,7 +121,7 @@ public class CatalogueController {
     @RequestMapping(value = "/catalogue/{standard}/{uuid}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getCatalogue(@PathVariable String standard, @PathVariable String uuid) {
+    public ResponseEntity getCatalogue(@PathVariable String standard, @PathVariable String uuid,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to get catalogue for standard: {}, uuid: {}", standard, uuid);
         Configuration.Standard std;
         try {
@@ -164,7 +164,8 @@ public class CatalogueController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             method = RequestMethod.POST)
     public ResponseEntity addXMLCatalogue(@PathVariable String standard,
-                                          @RequestBody String serializedCatalogue, HttpServletRequest request) {
+                                          @RequestBody String serializedCatalogue, HttpServletRequest request,
+                                          @RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to post catalogue with standard: {} standard", standard);
         log.debug("Catalogue content: {}", serializedCatalogue);
 
@@ -264,7 +265,7 @@ public class CatalogueController {
             consumes = {"application/json"},
             produces = {"application/json"},
             method = RequestMethod.PUT)
-    public ResponseEntity updateJSONCatalogue(@PathVariable String standard, @RequestBody String catalogueJson) {
+    public ResponseEntity updateJSONCatalogue(@PathVariable String standard, @RequestBody String catalogueJson,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to update catalogue");
         log.debug("Catalogue data: " + catalogueJson);
 
@@ -309,7 +310,7 @@ public class CatalogueController {
     })
     @RequestMapping(value = "/catalogue/{standard}/{uuid}",
             method = RequestMethod.DELETE)
-    public ResponseEntity deleteCatalogue(@PathVariable String standard, @PathVariable String uuid) {
+    public ResponseEntity deleteCatalogue(@PathVariable String standard, @PathVariable String uuid,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to delete catalogue with uuid: {}", uuid);
 
         Configuration.Standard std;
@@ -346,7 +347,8 @@ public class CatalogueController {
     public void downloadTemplate(
             @RequestParam("categoryIds") List<String> categoryIds,
             @RequestParam("taxonomyIds") List<String> taxonomyIds,
-            HttpServletResponse response) {
+            HttpServletResponse response,
+            @RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to generate a template. Category ids: {}, taxonomy ids: {}", categoryIds, taxonomyIds);
 
         Workbook template;
@@ -471,7 +473,9 @@ public class CatalogueController {
             method = RequestMethod.POST)
     public ResponseEntity uploadImages(
             @RequestParam("package") MultipartFile pack,
-            @RequestParam("catalogueUuid") String catalogueUuid) {
+            @RequestParam("catalogueUuid") String catalogueUuid,
+            @RequestHeader(value="Authorization", required=true) String bearerToken
+            ) {
         log.info("Incoming request to upload images for catalogue: {}", catalogueUuid);
 
         if (service.getCatalogue(catalogueUuid) == null) {
@@ -511,7 +515,7 @@ public class CatalogueController {
     @RequestMapping(value = "/catalogue/template/example",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void downloadExampleTemplate(HttpServletResponse response) {
+    public void downloadExampleTemplate(HttpServletResponse response, @RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to get the example filled in template");
 
         InputStream is = CatalogueController.class.getResourceAsStream("/template/wooden_mallet_template.xlsx");
@@ -551,7 +555,7 @@ public class CatalogueController {
     @RequestMapping(value = "/catalogue/standards",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getSupportedStandards() {
+    public ResponseEntity getSupportedStandards(@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to retrieve the supported standards");
 
         List<Configuration.Standard> standards;

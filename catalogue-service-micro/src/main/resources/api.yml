@@ -25,6 +25,10 @@ paths:
         description: Identifier of the party
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Default the default catalogue for the specified party
@@ -44,6 +48,10 @@ paths:
       - in: body
         name: serializedCatalogue
         required: true
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         201:
           description: Saved catalogue is returned
@@ -58,6 +66,10 @@ paths:
       parameters:
       - in: body
         name: catalogueJson
+        required: true
+      - name: Authorization
+        in: header
+        type: string
         required: true
       responses:
         304:
@@ -84,6 +96,10 @@ paths:
         description: Identifier of the catalogue
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: The catalogue specified with the uuid is returned
@@ -106,6 +122,10 @@ paths:
         description: Identifier of the catalogue to be deleted
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Catalogue deleted, if one exists
@@ -129,6 +149,10 @@ paths:
         description: Comma separated taxonomy ids. Example "FurnitureOntology,eClass"
         required: false
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Returned the generated template
@@ -159,6 +183,10 @@ paths:
         description: Name of the party submitting the template
         required: false
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         201:
           description: Returned the generated template
@@ -179,6 +207,10 @@ paths:
         description: Unique identifier of the catalogue including the products for which the images are provided
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Added images to products
@@ -187,6 +219,11 @@ paths:
       operationId: getSupportedStandards
       summary: Get supported standards
       description: Returns the list of supported standards
+      parameters:
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Supported standards returned
@@ -203,6 +240,10 @@ paths:
         description: Unique identifier of the catalogue to which the provided catalogue line will be added
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         201:
           description: Returned created catalogue line
@@ -220,6 +261,10 @@ paths:
         description: Unique identifier of the catalogue containing including the provided catalogue line
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Returned updated catalogue line
@@ -242,6 +287,10 @@ paths:
         description: Identifier of the catalogue line
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Returned requested catalogue line
@@ -262,6 +311,10 @@ paths:
         description: Identifier of the catalogue line to be deleted
         required: true
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Deleted catalogue line
@@ -287,6 +340,10 @@ paths:
         description: List of category ids. Example "0173-1#01-BAC439#012,0173-1#01-AJZ694#013"
         required: false
         type: string
+      - name: Authorization
+        in: header
+        type: string
+        required: true
       responses:
         200:
           description: Returned categories matched with the specified parameters
@@ -297,6 +354,11 @@ paths:
       operationId: getAvailableTaxonomies
       summary: Get available taxonomies
       description: Retrieves the identifiers of the available product category taxonomies
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
       produces: [application/json]
       responses:
         200:
@@ -314,6 +376,10 @@ paths:
           name: categoryId
           required: true
           type: string
+        - name: Authorization
+          in: header
+          type: string
+          required: true
   /unit-lists:
       get:
         operationId: getAllUnitList
@@ -330,6 +396,10 @@ paths:
           name: units
           required: true
           type: string
+        - name: Authorization
+          in: header
+          type: string
+          required: true
 
   /unit-lists/{unitListId}:
       get:
@@ -352,11 +422,15 @@ paths:
                   name: unit
                   required: true
                   type: string
+                - name: Authorization
+                  in: header
+                  type: string
+                  required: true
   /unit-lists/{unitListId}/unit/{unit}:
       delete:
         operationId: deleteUnitFromList
         produces: [application/json]
-        paraneter:
+        parameters:
                 - in: path
                   name: unitListId
                   required: true
@@ -365,3 +439,7 @@ paths:
                   name: unit
                   required: true
                   type: string
+                - name: Authorization
+                  in: header
+                  type: string
+                  required: true

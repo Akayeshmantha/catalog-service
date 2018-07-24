@@ -54,7 +54,7 @@ public class CatalogueLineController {
     @RequestMapping(value = "/{lineId}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getCatalogueLine(@PathVariable String catalogueUuid, @PathVariable String lineId) {
+    public ResponseEntity getCatalogueLine(@PathVariable String catalogueUuid, @PathVariable String lineId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to get catalogue line with lineId: {}", lineId);
 
         if (service.getCatalogue(catalogueUuid) == null) {
@@ -97,7 +97,7 @@ public class CatalogueLineController {
             consumes = {"application/json"},
             produces = {"application/json"},
             method = RequestMethod.POST)
-    public ResponseEntity addCatalogueLine(@PathVariable String catalogueUuid, @RequestBody String catalogueLineJson) {
+    public ResponseEntity addCatalogueLine(@PathVariable String catalogueUuid, @RequestBody String catalogueLineJson,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to add catalogue line to catalogue: {}", catalogueUuid);
         CatalogueType catalogue;
         CatalogueLineType catalogueLine;
@@ -168,7 +168,7 @@ public class CatalogueLineController {
     @RequestMapping(consumes = {"application/json"},
             produces = {"application/json"},
             method = RequestMethod.PUT)
-    public ResponseEntity updateCatalogueLine(@PathVariable String catalogueUuid, @RequestBody String catalogueLineJson) {
+    public ResponseEntity updateCatalogueLine(@PathVariable String catalogueUuid, @RequestBody String catalogueLineJson,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to update catalogue line. Catalogue uuid: {}", catalogueUuid);
 
         if (service.getCatalogue(catalogueUuid) == null) {
@@ -219,7 +219,7 @@ public class CatalogueLineController {
     @RequestMapping(value = "/{lineId}",
             produces = {"application/json"},
             method = RequestMethod.DELETE)
-    public ResponseEntity deleteCatalogueLineById(@PathVariable String catalogueUuid, @PathVariable String lineId) {
+    public ResponseEntity deleteCatalogueLineById(@PathVariable String catalogueUuid, @PathVariable String lineId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to delete catalogue line. catalogue uuid: {}: line lineId {}", catalogueUuid, lineId);
 
         if (service.getCatalogue(catalogueUuid) == null) {

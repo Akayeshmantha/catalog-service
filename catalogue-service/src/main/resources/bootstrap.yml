@@ -139,6 +139,10 @@ security:
 nimble:
   identity:
     url: ${IDENTITY_SERVICE_URL:http://nimble-staging.salzburgresearch.at/identity}
+  federation:
+    core-endpoint:${CORE_ENDPOINT_URL:http://localhost:8081}
+  instance:
+    instance_id:${INSTANCE_ID:11}
 
 ################################################################################################
 ################################## KUBERNETES CONFIG ###########################################

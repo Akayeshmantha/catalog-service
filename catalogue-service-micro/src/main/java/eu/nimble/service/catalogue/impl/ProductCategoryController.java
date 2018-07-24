@@ -50,7 +50,8 @@ public class ProductCategoryController {
             method = RequestMethod.GET)
     public ResponseEntity getCategories(@RequestParam(required = false) List<String> categoryNames,
                                         @RequestParam(required = false) List<String> taxonomyIds,
-                                        @RequestParam(required = false) List<String> categoryIds) {
+                                        @RequestParam(required = false) List<String> categoryIds,
+                                        @RequestHeader(value="Authorization", required=true) String bearerToken) {
         log.info("Incoming request to get categories category names");
         List<Category> categories = new ArrayList<>();
         if (categoryNames != null && categoryNames.size() > 0) {
@@ -98,7 +99,7 @@ public class ProductCategoryController {
     @RequestMapping(value = "/catalogue/category/taxonomies",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getAvailableTaxonomies() {
+    public ResponseEntity getAvailableTaxonomies(@RequestHeader(value="Authorization", required=true) String bearerToken) {
         List<String> taxonomies;
         try {
             taxonomies = csm.getAvailableTaxonomies();
@@ -120,7 +121,7 @@ public class ProductCategoryController {
     @RequestMapping(value = "/catalogue/category/{taxonomyId}/{parentCategoryId}/subcategories",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getSubCategories(@PathVariable String taxonomyId, @PathVariable String parentCategoryId) {
+    public ResponseEntity getSubCategories(@PathVariable String taxonomyId, @PathVariable String parentCategoryId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         if (!taxonomyIdExists(taxonomyId)) {
             log.error("The given taxonomy id : {} is not valid", taxonomyId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The given taxonomy id %s is not valid", taxonomyId));
@@ -145,7 +146,7 @@ public class ProductCategoryController {
     @RequestMapping(value = "/catalogue/category/{taxonomyId}/root-categories",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getRootCategories(@PathVariable String taxonomyId) {
+    public ResponseEntity getRootCategories(@PathVariable String taxonomyId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         if (!taxonomyIdExists(taxonomyId)) {
             log.error("The given taxonomy id : {} is not valid", taxonomyId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The given taxonomy id %s is not valid", taxonomyId));
@@ -164,7 +165,7 @@ public class ProductCategoryController {
     @RequestMapping(value = "/catalogue/category/{taxonomyId}/{categoryId}/children-categories",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getChildrenCategories(@PathVariable String taxonomyId, @PathVariable String categoryId) {
+    public ResponseEntity getChildrenCategories(@PathVariable String taxonomyId, @PathVariable String categoryId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         if (!taxonomyIdExists(taxonomyId)) {
             log.error("The given taxonomy id : {} is not valid", taxonomyId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The given taxonomy id %s is not valid", taxonomyId));
@@ -189,7 +190,7 @@ public class ProductCategoryController {
     @RequestMapping(value = "/catalogue/category/{taxonomyId}/{categoryId}/tree",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getCategoryTree(@PathVariable String taxonomyId, @PathVariable String categoryId) {
+    public ResponseEntity getCategoryTree(@PathVariable String taxonomyId, @PathVariable String categoryId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         if (!taxonomyIdExists(taxonomyId)) {
             log.error("The given taxonomy id : {} is not valid", taxonomyId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The given taxonomy id %s is not valid", taxonomyId));

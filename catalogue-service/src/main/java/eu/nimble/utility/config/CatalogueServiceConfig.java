@@ -52,6 +52,12 @@ public class CatalogueServiceConfig {
     @Value("${nimble.identity.url}")
     private String identityUrl;
 
+    @Value("${nimble.federation.core-endpoint}")
+    private String coreEndpointUrl;
+
+    @Value("${nimble.instance.instance_id}")
+    private String instanceId;
+
     private static CatalogueServiceConfig instance;
 
     private CatalogueServiceConfig() {
@@ -97,6 +103,13 @@ public class CatalogueServiceConfig {
     public void setSpringApplicationUrl(String springApplicationUrl) {
         this.springApplicationUrl = springApplicationUrl;
     }
+
+    public String getCoreEndpointUrl(){return coreEndpointUrl;}
+
+    public String getInstanceid() {
+        return instanceId;
+    }
+
 
     public String getSyncDbDriver() {
         return syncDbDriver;

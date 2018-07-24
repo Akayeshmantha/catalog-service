@@ -30,7 +30,7 @@ public class UnitServiceController {
     @RequestMapping(value = "/unit-lists",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity<List<UnitList>> getAllUnitList() {
+    public ResponseEntity<List<UnitList>> getAllUnitList(@RequestHeader(value="Authorization", required=true) String bearerToken) {
         logger.info("All unit lists will be received");
         List<UnitList> resultSet = unitManager.getAllUnitList();
         logger.info("All unit lists are received");
@@ -46,7 +46,7 @@ public class UnitServiceController {
     @RequestMapping(value = "/unit-lists/{unitListId}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    public ResponseEntity getValues(@PathVariable String unitListId) {
+    public ResponseEntity getValues(@PathVariable String unitListId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         logger.info("All units will be received for unitListId: {}", unitListId);
 
         if (!unitManager.checkUnitListId(unitListId)) {
@@ -68,7 +68,7 @@ public class UnitServiceController {
     @RequestMapping(value = "/unit-lists/{unitListId}",
             produces = {"application/json"},
             method = RequestMethod.PATCH)
-    public ResponseEntity addUnitToList(@RequestParam("unit") String unit, @PathVariable String unitListId) {
+    public ResponseEntity addUnitToList(@RequestParam("unit") String unit, @PathVariable String unitListId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         logger.info("Unit '{}' will be added to unit list with id: {}", unit, unitListId);
 
         if (!unitManager.checkUnitListId(unitListId)) {
@@ -93,7 +93,7 @@ public class UnitServiceController {
     @RequestMapping(value = "/unit-lists/{unitListId}/unit/{unit}",
             produces = {"application/json"},
             method = RequestMethod.DELETE)
-    public ResponseEntity deleteUnitFromList(@PathVariable String unit, @PathVariable String unitListId) {
+    public ResponseEntity deleteUnitFromList(@PathVariable String unit, @PathVariable String unitListId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         logger.info("Unit '{}' will be deleted from unit list with id: {}", unit, unitListId);
 
         if (!unitManager.checkUnitListId(unitListId)) {
@@ -117,7 +117,7 @@ public class UnitServiceController {
     @RequestMapping(value = "/unit-lists",
             produces = {"application/json"},
             method = RequestMethod.POST)
-    public ResponseEntity addUnitList(@RequestParam("units") List<String> units, @RequestParam("unitListId") String unitListId) {
+    public ResponseEntity addUnitList(@RequestParam("units") List<String> units, @RequestParam("unitListId") String unitListId,@RequestHeader(value="Authorization", required=true) String bearerToken) {
         logger.info("Unit list with id: {} will be persisted in DB", unitListId);
 
         if (unitManager.checkUnitListId(unitListId)) {
