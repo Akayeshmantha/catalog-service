@@ -4,17 +4,13 @@ package eu.nimble.service.catalogue.impl;
 import eu.nimble.service.catalogue.federation.CatalogueServiceClient;
 import eu.nimble.service.catalogue.federation.ClientFactory;
 import eu.nimble.service.catalogue.federation.CoreFunctions;
-import eu.nimble.service.catalogue.model.unit.UnitList;
 import eu.nimble.utility.config.CatalogueServiceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-
+@CrossOrigin(origins = {"*"})
 @Controller
 @RequestMapping(value="/delegate")
 public class DelegateController {
@@ -30,9 +26,6 @@ public class DelegateController {
     private CatalogueLineController catalogueLineController;
 
     @Autowired
-    private ClientFactory factory;
-
-    @Autowired
     private CoreFunctions core;
 
     @Autowired
@@ -42,7 +35,7 @@ public class DelegateController {
 
     public CatalogueServiceClient clientGenerator(String instanceid){
         String url=core.getEndpointFromInstanceId(instanceid);
-        return factory.createClient(CatalogueServiceClient.class,url);
+        return ClientFactory.getClientFactoryInstance().createClient(CatalogueServiceClient.class,url);
     }
 
 
@@ -53,16 +46,13 @@ public class DelegateController {
     public ResponseEntity delegateGetDefaultCatalogue(@PathVariable String partyId,
                                                       @RequestParam(value="targetInstanceId" ,required = true)String targetInstanceId,
                                                       @RequestParam(value = "initiatorInstanceId", required = true) String initiatorInstanceId,
-                                                      @RequestHeader(value="Authorization", required=true) String bearerToken ) {
-
-
+                                                      @RequestHeader(value="Authorization", required=true) String bearerToken ) throws Exception{
         if(config.getInstanceid().equals(targetInstanceId))
             return this.catalogueController.getDefaultCatalogue(partyId,bearerToken);
         else
-            return clientGenerator(targetInstanceId).clientGetDefaultCatalogue(partyId,initiatorInstanceId,targetInstanceId,bearerToken);
+            return ClientFactory.getClientFactoryInstance().createResponseEntity(clientGenerator(targetInstanceId).clientGetDefaultCatalogue(partyId,initiatorInstanceId,targetInstanceId,bearerToken));
 
     }
-
 
     @RequestMapping(value = "/catalogue/{standard}/{uuid}",
             produces = {"application/json"},
@@ -71,13 +61,13 @@ public class DelegateController {
                                                @PathVariable String uuid,
                                                @RequestParam(value="targetInstanceId" ,required = true)String targetInstanceId,
                                                @RequestParam(value = "initiatorInstanceId", required = true) String initiatorInstanceId,
-                                               @RequestHeader(value="Authorization", required=true) String bearerToken) {
+                                               @RequestHeader(value="Authorization", required=true) String bearerToken) throws Exception{
 
 
         if(config.getInstanceid().equals(targetInstanceId))
             return this.catalogueController.getCatalogue(standard,uuid,bearerToken);
         else
-            return clientGenerator(targetInstanceId).clientGetCatalogue(standard,uuid,initiatorInstanceId,targetInstanceId,bearerToken);
+            return ClientFactory.getClientFactoryInstance().createResponseEntity(clientGenerator(targetInstanceId).clientGetCatalogue(standard,uuid,initiatorInstanceId,targetInstanceId,bearerToken));
     }
 
 
@@ -88,14 +78,19 @@ public class DelegateController {
                                                    @PathVariable String lineId,
                                                    @RequestParam(value="targetInstanceId" ,required = true)String targetInstanceId,
                                                    @RequestParam(value = "initiatorInstanceId", required = true) String initiatorInstanceId,
-                                                   @RequestHeader(value="Authorization", required=true) String bearerToken) {
+                                                   @RequestHeader(value="Authorization", required=true) String bearerToken) throws Exception{
 
 
         if(config.getInstanceid().equals(targetInstanceId))
             return this.catalogueLineController.getCatalogueLine(catalogueUuid,lineId,bearerToken);
-        else
-            return clientGenerator(targetInstanceId).clientGetCatalogueLine(catalogueUuid,lineId,initiatorInstanceId,targetInstanceId,bearerToken);
+        else{
+            return ClientFactory.getClientFactoryInstance().createResponseEntity(clientGenerator(targetInstanceId).clientGetCatalogueLine(catalogueUuid,lineId,initiatorInstanceId,targetInstanceId,bearerToken));
+
+        }
+
     }
+
+
 
 
 }

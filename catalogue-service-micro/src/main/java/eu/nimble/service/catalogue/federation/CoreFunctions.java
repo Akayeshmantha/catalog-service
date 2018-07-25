@@ -19,7 +19,7 @@ public class CoreFunctions {
             TODO:
             A consumer in order to get the instance endpoint from the core url.
         */
-        return "http://localhost:8081";
+        return "http://192.168.1.103:8095";
     }
 
 
